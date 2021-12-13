@@ -1,0 +1,14 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  namespace: openshift-adp
+  name: backup-all-manange-sample-1
+spec:
+  volumeSnapshotLocations:
+    - velero-sample-1
+  defaultVolumesToRestic: false
+  ttl: 720h0m0s
+  storageLocation: velero-sample-1
+  includeClusterResources: true
+  includedNamespaces:
+    - mas-sb1-manage
