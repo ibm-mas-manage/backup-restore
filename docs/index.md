@@ -1,4 +1,4 @@
-## Backup and Restore
+# Backup and Restore
 
 Backup and restore of running containerized applications is a critical task. Without this capability, organizations run the risk of disruption of service and unplanned downtime. This article outlines the architecture, setup, and configure the OADP operator for backup and restoring the Manage application in the OpenShift cluster. OADP is the OpenShift API for the Data Protection operator. This open-source operator sets up and installs [Velero](https://velero.io/) on the OpenShift platform, allowing users to backup and restore applications.
 
@@ -15,7 +15,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 
 	Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
 	
-**Setup OADP operator**
+### 2.Setup OADP operator
     - Log on to the OpenShift web console as the cluster administrator.
     - In the navigation panel, click Operators> OperatorHub.
     - To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.
@@ -24,7 +24,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 	
 	- Click on the OADP card and install.
 
-### Create Credentials Secret
+#### Create Credentials Secret
     Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 
 ```
@@ -34,7 +34,7 @@ aws_secret_access_key=<storage_secret_access_key
 
 ```
 
-### Create secret
+#### Create secret
 
 ```
 oc create secret generic cloud-credentials
@@ -49,7 +49,7 @@ For example,
 oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
 ```
 
-### Create the DataProtectionApplication Custom Resource
+#### Create the DataProtectionApplication Custom Resource
 
 - Create an instance for DataProtectionApplication.
     - Add s3Url in config and update bucket in objectStorage section.
@@ -142,19 +142,16 @@ Retrieve backup logs
 Retrieve restores:
 ```
 ./velero get restores
-
 ```
 
 Describe restores:
 ```
 ./velero restore describe <restore_name>
-
 ```
 
-Retrieve restore logs
+Retrieve restore logs:
 ```
  ./velero restore logs <restore_name>
- 
 ​```
 
 
@@ -163,7 +160,7 @@ Retrieve restore logs
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
 
 Character Position  |  Character Period  | Acceptable Values  | 
-------|----------|------------- |
+------ |----- |-----|
 1 | Minute | 0-59,* |
 2 | Hour | 0-23,* |
 3 | Day of Month | 0-31,* |
