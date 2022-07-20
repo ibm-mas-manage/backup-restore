@@ -169,7 +169,8 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 
 
 ## CSI Snapshots
-	Manage attached docs can be backed up and restored using CSI plugin.
+
+Manage attached docs can be backed up and restored using CSI plugin.
 	Configuration for Attached docs include
 	- Storage and Volume Snapshot classes
 	- Add label to Volume Snapshot class
