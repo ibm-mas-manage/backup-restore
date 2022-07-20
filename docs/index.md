@@ -113,8 +113,9 @@ spec:
 
 
 ## Backup Details and Troubleshooting
-    - Navigate to **Workloads->Pods** in openshift-adp project.
-    - Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
+
+- Navigate to **Workloads->Pods** in openshift-adp project.
+- Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
 
 Retrieve backup:
 
@@ -192,13 +193,13 @@ Sample Manage Workspace CR snippet:
 
 ```
 deployment:
-      buildTag: latest
-      mode: up
-      persistentVolumes:
-        - mountPath: /doclinks
-          pvcName: manage-csi-pvc
-          size: 8Gi
-          storageClassName: ocs-storagecluster-cephfs
+    buildTag: latest
+    mode: up
+    persistentVolumes:
+      - mountPath: /doclinks
+        pvcName: manage-csi-pvc
+        size: 8Gi
+        storageClassName: ocs-storagecluster-cephfs
 		  
 ```
 
