@@ -22,10 +22,12 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 
 ![Image](operatorhub.png)
 	
+	
 	- Click on the OADP card and install.
 
 #### Create Credentials Secret
     - Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
+	
 
 ```
 [default]
@@ -43,7 +45,6 @@ oc create secret generic cloud-credentials
 ```
 
 For example,
-
 ```
 oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
 ```
@@ -93,14 +94,14 @@ spec:
 ![Image](location.png)
 
 ### Verify Install
-    - Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
+	- Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
 
 ![Image](verify.png)
 
 ## Create Backup
-    - In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-    - Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
-    - Check the backup status.
+   - In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
+   - Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
+   - Check the backup status.
 
 ![Image](backup.png) 
 
@@ -129,7 +130,7 @@ Retrieve backup logs
 - In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
     - Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
     - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
-        Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
+    - Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
 
 ### Restore Details and Troubleshooting
     - Navigate to **Workloads->Pods** in openshift-adp project.
