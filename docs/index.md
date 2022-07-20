@@ -148,13 +148,13 @@ Retrieve backup logs
 - Navigate to **Workloads->Pods** in openshift-adp project.
 - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 
-Retrieve restores:
+Retrieve restore:
 
 ```
-./velero get restores
+./velero get restore
 ```
 
-Describe restores:
+Describe restore:
 
 ```
 ./velero restore describe <restore_name>
@@ -164,11 +164,14 @@ Retrieve restore logs:
 
 ```
  ./velero restore logs <restore_name>
+ 
 ​```
 
 
 ## Schedule Backup
+
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
+
 
 Character Position  |  Character Period  | Acceptable Values  | 
 --|----- |-----|
@@ -177,6 +180,7 @@ Character Position  |  Character Period  | Acceptable Values  |
 3 | Day of Month | 0-31,* |
 4 | Month | 1-12,* |
 5 | Day of Week | 1-7,* |
+
 
 Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/schedule-all-manage-sample-1.yaml)      
 
@@ -190,6 +194,7 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 	- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
+
 
 ```
 deployment:
