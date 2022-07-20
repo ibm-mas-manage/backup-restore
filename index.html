@@ -45,6 +45,36 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href=".">Backup and Restore</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-configure-s3-storage-to-store-backup-files">1. Configure S3 Storage to store backup files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2setup-oadp-operator">2.Setup OADP operator</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#create-credentials-secret">Create Credentials Secret</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#create-secret">Create secret</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#create-the-dataprotectionapplication-custom-resource">Create the DataProtectionApplication Custom Resource</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#verify-install">Verify Install</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-backup">Create Backup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#backup-details-and-troubleshooting">Backup Details and Troubleshooting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-restore">Create Restore</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#restore-details-and-troubleshooting">Restore Details and Troubleshooting</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scenarios">Scenarios`</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -73,7 +103,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="backup-and-restore">Backup and Restore<a class="headerlink" href="#backup-and-restore" title="Permanent link"></a></h2>
+                <h1 id="backup-and-restore">Backup and Restore<a class="headerlink" href="#backup-and-restore" title="Permanent link"></a></h1>
 <p>Backup and restore of running containerized applications is a critical task. Without this capability, organizations run the risk of disruption of service and unplanned downtime. This article outlines the architecture, setup, and configure the OADP operator for backup and restoring the Manage application in the OpenShift cluster. OADP is the OpenShift API for the Data Protection operator. This open-source operator sets up and installs <a href="https://velero.io/">Velero</a> on the OpenShift platform, allowing users to backup and restore applications.</p>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link"></a></h2>
 <p>The OADP operator uses a Velero backup controller to backup cluster resources. Velero uses Kubernetes API to create backup and stores the backup files in the configured storage. The data includes Kubernetes resources, such as config maps, secrets, custom resource definitions, custom resources. persistent volumes, persistent volume claims. User can include or exclude resources as needed.</p>
@@ -84,31 +114,31 @@
 
 Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
 </code></pre>
-<p><strong>Setup OADP operator</strong>
-    - Log on to the OpenShift web console as the cluster administrator.
-    - In the navigation panel, click Operators&gt; OperatorHub.
-    - To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.</p>
+<h3 id="2setup-oadp-operator">2.Setup OADP operator<a class="headerlink" href="#2setup-oadp-operator" title="Permanent link"></a></h3>
+<pre><code>- Log on to the OpenShift web console as the cluster administrator.
+- In the navigation panel, click Operators&gt; OperatorHub.
+- To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.
+</code></pre>
 <p><img alt="Image" src="operatorhub.png" /></p>
 <pre><code>- Click on the OADP card and install.
 </code></pre>
-<h3 id="create-credentials-secret">Create Credentials Secret<a class="headerlink" href="#create-credentials-secret" title="Permanent link"></a></h3>
-<pre><code>Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
+<h4 id="create-credentials-secret">Create Credentials Secret<a class="headerlink" href="#create-credentials-secret" title="Permanent link"></a></h4>
+<pre><code>- Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 </code></pre>
 <pre><code>[default]
 aws_access_key_id=&lt;storage_access_key_id&gt;
 aws_secret_access_key=&lt;storage_secret_access_key
 
 </code></pre>
-<h3 id="create-secret">Create secret<a class="headerlink" href="#create-secret" title="Permanent link"></a></h3>
+<h4 id="create-secret">Create secret<a class="headerlink" href="#create-secret" title="Permanent link"></a></h4>
 <pre><code>oc create secret generic cloud-credentials
 --namespace openshift-oadp
 --from-file cloud - &lt;path-to-secret-file&gt;
-
 </code></pre>
 <p>For example,</p>
 <pre><code>oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
 </code></pre>
-<h3 id="create-the-dataprotectionapplication-custom-resource">Create the DataProtectionApplication Custom Resource<a class="headerlink" href="#create-the-dataprotectionapplication-custom-resource" title="Permanent link"></a></h3>
+<h4 id="create-the-dataprotectionapplication-custom-resource">Create the DataProtectionApplication Custom Resource<a class="headerlink" href="#create-the-dataprotectionapplication-custom-resource" title="Permanent link"></a></h4>
 <ul>
 <li>Create an instance for DataProtectionApplication.<ul>
 <li>Add s3Url in config and update bucket in objectStorage section.</li>
@@ -157,10 +187,11 @@ aws_secret_access_key=&lt;storage_secret_access_key
 </code></pre>
 <p><img alt="Image" src="verify.png" /></p>
 <h2 id="create-backup">Create Backup<a class="headerlink" href="#create-backup" title="Permanent link"></a></h2>
-<pre><code>In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
-Check the backup status.
-</code></pre>
+<ul>
+<li>In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.</li>
+<li>Update <code>includedNamespaces</code> in the yaml with your Manage namespace/project. For example, <a href="https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml">backup-all-manange-sample-1.yaml</a></li>
+<li>Check the backup status.</li>
+</ul>
 <p><img alt="Image" src="backup.png" /> </p>
 <h2 id="backup-details-and-troubleshooting">Backup Details and Troubleshooting<a class="headerlink" href="#backup-details-and-troubleshooting" title="Permanent link"></a></h2>
 <pre><code>- Navigate to **Workloads-&gt;Pods** in openshift-adp project.
@@ -177,26 +208,26 @@ Check the backup status.
 <pre><code> ./velero backup logs &lt;backup_name&gt;
 </code></pre>
 <h2 id="create-restore">Create Restore<a class="headerlink" href="#create-restore" title="Permanent link"></a></h2>
-<pre><code>- In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
-- Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
-- Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
-    Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
-</code></pre>
+<ul>
+<li>In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.<ul>
+<li>Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.</li>
+<li>Sample <a href="https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml">restore-all-manage-sample-1.yaml</a> and <a href="https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml">restore-all-manage-sample-2.yaml</a></li>
+<li>Update <code>includedNamespaces</code> in the yaml with your Manage namespace/project and backup name.</li>
+</ul>
+</li>
+</ul>
 <h3 id="restore-details-and-troubleshooting">Restore Details and Troubleshooting<a class="headerlink" href="#restore-details-and-troubleshooting" title="Permanent link"></a></h3>
 <pre><code>- Navigate to **Workloads-&gt;Pods** in openshift-adp project.
 - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 </code></pre>
 <p>Retrieve restores:</p>
 <pre><code>./velero get restores
-
 </code></pre>
 <p>Describe restores:</p>
 <pre><code>./velero restore describe &lt;restore_name&gt;
-
 </code></pre>
-<p>Retrieve restore logs</p>
+<p>Retrieve restore logs:</p>
 <pre><code> ./velero restore logs &lt;restore_name&gt;
-
 ​```
 
 
@@ -205,7 +236,7 @@ Check the backup status.
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
 
 Character Position  |  Character Period  | Acceptable Values  | 
-------|----------|------------- |
+------ |----- |-----|
 1 | Minute | 0-59,* |
 2 | Hour | 0-23,* |
 3 | Day of Month | 0-31,* |
@@ -216,16 +247,14 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 
 
 ## CSI Snapshots
-
-Manage attached docs can be backed up and restored using CSI plugin.
-    Configuration for Attached docs include
+- Manage attached docs can be backed up and restored using CSI plugin.
+- Configuration for Attached docs include
     - Storage and Volume Snapshot classes
     - Add label to Volume Snapshot class
         - velero.io/csi-volumesnapshot-class=true
     - Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
-
 </code></pre>
 <p>deployment:
       buildTag: latest
@@ -245,10 +274,14 @@ Sample Manage Workspace CR snippet:
 <li>Restore from backup</li>
 </ul>
 <p><img alt="Image" src="csirestore.png" /></p>
-<h2 id="scenarios">Scenarios<a class="headerlink" href="#scenarios" title="Permanent link"></a></h2>
-<p>Backup should be taken regularly including in the following scenarios:
-- Before deactivating the application
-- Before updating the application</p>
+<h2 id="scenarios">Scenarios`<a class="headerlink" href="#scenarios" title="Permanent link"></a></h2>
+<ul>
+<li>Backup should be taken regularly including in the following scenarios:<ul>
+<li>Before deactivating the application</li>
+<li>Before updating the application</li>
+</ul>
+</li>
+</ul>
               
             </div>
           </div><footer>
@@ -295,5 +328,5 @@ Sample Manage Workspace CR snippet:
 
 <!--
 MkDocs version : 1.3.1
-Build Date UTC : 2022-07-20 03:53:12.370244+00:00
+Build Date UTC : 2022-07-20 04:10:48.517031+00:00
 -->
