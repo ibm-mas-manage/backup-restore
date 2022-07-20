@@ -1,0 +1,36 @@
+# mkdocs serve
+
+site_name: High Availability and Disaster Recovery
+
+site_url: https://ibmmaximo.github.io/backupandrestore
+
+repo_name: GitHub
+repo_url: https://github.com/ibmmaximo/backupandrestore
+edit_uri: blob/master/docs/
+
+nav:
+  #- 'Home': index.md
+  #- 'Changes': changes.md
+  - 'High Availabilty and Disaster Recovery Strategies': index.md
+  #  - 'OCP': playbooks/ocp.md
+  #  - 'Install Core': playbooks/oneclick-core.md
+  #  - 'Add IoT': playbooks/oneclick-iot.md
+  #  - 'Add Manage': playbooks/oneclick-manage.md
+  #  - 'Add Monitor': playbooks/oneclick-monitor.md
+  
+
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+  prev_next_buttons_location: none
+extra_css:
+  - extra.css
+markdown_extensions:
+  - toc:
+      permalink: 
+  - admonition
+  # Add this to support expandable sections
+  #- pymdownx.details
+
