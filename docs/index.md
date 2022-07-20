@@ -10,7 +10,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 
 
 ### 1. Configure S3 Storage to store backup files
-    - Login to your IBM Cloud account.
+	- Login to your IBM Cloud account.
     - Create and configure object storage service.
 
 	Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
@@ -25,7 +25,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 	- Click on the OADP card and install.
 
 #### Create Credentials Secret
-    Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
+    - Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 
 ```
 [default]
@@ -40,7 +40,6 @@ aws_secret_access_key=<storage_secret_access_key
 oc create secret generic cloud-credentials
 --namespace openshift-oadp
 --from-file cloud - <path-to-secret-file>
-
 ```
 
 For example,
@@ -52,7 +51,7 @@ oc create secret generic cloud-credentials --namespace openshift-adp --from-file
 #### Create the DataProtectionApplication Custom Resource
 
 - Create an instance for DataProtectionApplication.
-    - Add s3Url in config and update bucket in objectStorage section.
+	- Add s3Url in config and update bucket in objectStorage section.
     - For example, [dataprotectionapplication-velero-sample.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/dataprotectionapplication-velero-sample.yaml)
 
 ```
@@ -99,10 +98,9 @@ spec:
 ![Image](verify.png)
 
 ## Create Backup
-
-    In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-    Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
-    Check the backup status.
+    - In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
+    - Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
+    - Check the backup status.
 
 ![Image](backup.png) 
 
@@ -128,14 +126,12 @@ Retrieve backup logs
 ```
 
 ## Create Restore
-
-	- In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
+- In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
     - Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
     - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
         Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
 
 ### Restore Details and Troubleshooting
-
     - Navigate to **Workloads->Pods** in openshift-adp project.
     - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 
@@ -171,16 +167,14 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 
 
 ## CSI Snapshots
-
-Manage attached docs can be backed up and restored using CSI plugin.
-	Configuration for Attached docs include
+- Manage attached docs can be backed up and restored using CSI plugin.
+- Configuration for Attached docs include
 	- Storage and Volume Snapshot classes
 	- Add label to Volume Snapshot class
 		- velero.io/csi-volumesnapshot-class=true
 	- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
-
 ```
 deployment:
       buildTag: latest
@@ -204,7 +198,7 @@ deployment:
 ![Image](csirestore.png)
 
 
-## Scenarios
-Backup should be taken regularly including in the following scenarios:
-- Before deactivating the application
-- Before updating the application
+## Scenarios`
+- Backup should be taken regularly including in the following scenarios:
+	- Before deactivating the application
+	- Before updating the application
