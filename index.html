@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><link rel="canonical" href="https://ibmmaximo.github.io/backupandrestore/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>High Availability and Disaster Recovery</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "High Availabilty and Disaster Recovery Strategies";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/backupandrestore/";
+      </script>
+    
+    <script src="js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/yaml.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> High Availability and Disaster Recovery
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href=".">High Availabilty and Disaster Recovery Strategies</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">High Availability and Disaster Recovery</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>High Availabilty and Disaster Recovery Strategies</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/ibmmaximo/backupandrestore/blob/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="backup-and-restore">Backup and Restore<a class="headerlink" href="#backup-and-restore" title="Permanent link"></a></h2>
+<p>Backup and restore of running containerized applications is a critical task. Without this capability, organizations run the risk of disruption of service and unplanned downtime. This article outlines the architecture, setup, and configure the OADP operator for backup and restoring the Manage application in the OpenShift cluster. OADP is the OpenShift API for the Data Protection operator. This open-source operator sets up and installs <a href="https://velero.io/">Velero</a> on the OpenShift platform, allowing users to backup and restore applications.</p>
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link"></a></h2>
+<p>The OADP operator uses a Velero backup controller to backup cluster resources. Velero uses Kubernetes API to create backup and stores the backup files in the configured storage. The data includes Kubernetes resources, such as config maps, secrets, custom resource definitions, custom resources. persistent volumes, persistent volume claims. User can include or exclude resources as needed.</p>
+<p><img alt="Image" src="oadparch.png" /></p>
+<h3 id="configure-s3-storage-to-store-backup-files">Configure S3 Storage to store backup files<a class="headerlink" href="#configure-s3-storage-to-store-backup-files" title="Permanent link"></a></h3>
+<pre><code>- Login to your IBM Cloud account.
+- Create and configure object storage service.
+
+Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
+</code></pre>
+<p><strong>Setup OADP operator</strong>
+    - Log on to the OpenShift web console as the cluster administrator.
+    - In the navigation panel, click Operators&gt; OperatorHub.
+    - To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.</p>
+<p><img alt="Image" src="operatorhub.png" /></p>
+<pre><code>- Click on the OADP card and install.
+</code></pre>
+<h3 id="create-credentials-secret">Create Credentials Secret<a class="headerlink" href="#create-credentials-secret" title="Permanent link"></a></h3>
+<pre><code>Create a secret file with the following content. For example,[cloud-cred.yaml](/scripts/cloud-cred.yaml)
+</code></pre>
+<pre><code>[default]
+aws_access_key_id=&lt;storage_access_key_id&gt;
+aws_secret_access_key=&lt;storage_secret_access_key
+
+</code></pre>
+<h3 id="create-secret">Create secret<a class="headerlink" href="#create-secret" title="Permanent link"></a></h3>
+<pre><code>oc create secret generic cloud-credentials
+--namespace openshift-oadp
+--from-file cloud - &lt;path-to-secret-file&gt;
+
+</code></pre>
+<p>For example,</p>
+<pre><code>oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
+</code></pre>
+<h3 id="create-the-dataprotectionapplication-custom-resource">Create the DataProtectionApplication Custom Resource<a class="headerlink" href="#create-the-dataprotectionapplication-custom-resource" title="Permanent link"></a></h3>
+<ul>
+<li>Create an instance for DataProtectionApplication.<ul>
+<li>Add s3Url in config and update bucket in objectStorage section.</li>
+<li>For example, <a href="/scripts/dataprotectionapplication-velero-sample.yaml">dataprotectionapplication-velero-sample.yaml</a></li>
+</ul>
+</li>
+</ul>
+<pre><code>spec:
+  backupLocations:
+    - velero:
+        config:
+          profile: default
+          region: us-east-1
+          s3ForcePathStyle: 'true'
+          s3Url: 'http://s3.us-east.cloud-object-storage.appdomain.cloud'
+        credential:
+          key: cloud
+          name: cloud-credentials
+        default: true
+        objectStorage:
+          bucket: my-bucket-name
+          prefix: velero
+        provider: aws
+  configuration:
+    restic:
+      enable: true
+    velero:
+      defaultPlugins:
+        - openshift
+        - aws
+        - csi
+  snapshotLocations:
+    - velero:
+        config:
+          profile: default
+          region: us-west-2
+        provider: aws
+
+</code></pre>
+<ul>
+<li>After DataProtectionApplication is reconciled, verify <strong>BackupStorageLocations</strong> is created.</li>
+</ul>
+<p><img alt="Image" src="location.png" /></p>
+<h3 id="verify-install">Verify Install<a class="headerlink" href="#verify-install" title="Permanent link"></a></h3>
+<pre><code>- Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
+</code></pre>
+<p><img alt="Image" src="verify.png" /></p>
+<h2 id="create-backup">Create Backup<a class="headerlink" href="#create-backup" title="Permanent link"></a></h2>
+<pre><code>In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
+Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](/scripts/cbackup-all-manange-sample-1.yaml)
+Check the backup status.
+</code></pre>
+<p><img alt="Image" src="backup.png" /> </p>
+<h2 id="backup-details-and-troubleshooting">Backup Details and Troubleshooting<a class="headerlink" href="#backup-details-and-troubleshooting" title="Permanent link"></a></h2>
+<pre><code>- Navigate to Workloads-&gt;Pods in openshift-adp project.
+- Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
+</code></pre>
+<pre><code>Retrieve backup:
+./velero  get backups
+</code></pre>
+<pre><code>Describe backups:
+./velero backup describe &lt;backup_name&gt; --details
+</code></pre>
+<pre><code>Retrieve backup logs
+ ./velero backup logs &lt;backup_name&gt;
+</code></pre>
+<h2 id="create-restore">Create Restore<a class="headerlink" href="#create-restore" title="Permanent link"></a></h2>
+<pre><code>- In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
+- Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
+- Sample restore-all-manage-sample-1.yaml and restore-all-manage-sample-2.yaml
+    Update “includedNamespaces” in the yaml with your Manage namespace/project and backup name.
+</code></pre>
+<h3 id="restore-details-and-troubleshooting">Restore Details and Troubleshooting<a class="headerlink" href="#restore-details-and-troubleshooting" title="Permanent link"></a></h3>
+<pre><code>- Navigate to **Workloads-&gt;Pods** in openshift-adp project.
+- Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
+</code></pre>
+<p>Retrieve restores:</p>
+<pre><code>./velero get restores
+</code></pre>
+<p>Describe restores:</p>
+<pre><code>./velero restore describe &lt;restore_name&gt;
+</code></pre>
+<p>Retrieve restore logs</p>
+<pre><code> ./velero restore logs &lt;restore_name&gt;
+​```
+
+##Schedule Backup
+
+You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
+
+Character Position  |  Character Period  | Acceptable Values  | 
+------ | ---------- | ------------- | ------------| 
+1 | Minute | 0-59, * |
+2 | Hour | 0-23, * |
+3 | Day of Month | 0-31, * |
+4 | Month | 1-12, * |
+5 | Day of Week | 1-7, * |
+
+Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card.  For example,  [schedule-all-manage-sample-1.yaml](/scripts/schedule-all-manage-sample-1.yaml)
+
+## CSI Snapshots
+Manage attached docs can be backed up and restored using CSI plugin.
+Configuration for Attached docs include
+- Storage and Volume Snapshot classes
+- Add label to Volume Snapshot class
+    - velero.io/csi-volumesnapshot-class=true
+- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
+
+Sample Manage Workspace CR snippet:
+</code></pre>
+<p>deployment:
+      buildTag: latest
+      mode: up
+      persistentVolumes:
+        - mountPath: /doclinks
+          pvcName: manage-csi-pvc
+          size: 8Gi
+          storageClassName: ocs-storagecluster-cephfs
+```</p>
+<ul>
+<li>Add attached docs from Manage Application. For example, go to Asset app, attach asset document to Asset record.</li>
+<li>Take a backup </li>
+</ul>
+<p><img alt="Image" src="csibackup.png" /> </p>
+<ul>
+<li>Restore from backup</li>
+</ul>
+<p><img alt="Image" src="csirestore.png" /></p>
+<h2 id="scenarios">Scenarios<a class="headerlink" href="#scenarios" title="Permanent link"></a></h2>
+<p>Backup should be taken regularly including in the following scenarios:
+- Before deactivating the application
+- Before updating the application</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/ibmmaximo/backupandrestore" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.3.1
+Build Date UTC : 2022-07-20 02:39:31.831024+00:00
+-->
