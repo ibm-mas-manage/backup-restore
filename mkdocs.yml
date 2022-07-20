@@ -5,7 +5,7 @@ site_name: Backup and Restore
 site_url: https://ibm-mas-manage.github.io/backup-restore/
 
 repo_name: GitHub
-repo_url: https://github.com/ibm-mas-manage/backupandrestore
+repo_url: https://github.com/ibm-mas-manage/backup-restore
 edit_uri: blob/master/docs/
 
 nav:
