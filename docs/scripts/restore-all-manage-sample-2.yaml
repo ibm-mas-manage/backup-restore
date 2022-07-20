@@ -1,0 +1,59 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-all-manage-sample-2
+  namespace: openshift-adp
+spec:
+  backupName: backup-all-manage-sample-1
+  excludedResources:
+    - buildconfigs
+    - builds
+    - images
+    - imagesignatures
+    - imagestreamimages
+    - imagestreams
+    - imagestreamtags
+    - imagestreamimports
+    - imagestreammappings
+    - imagetags
+    - truststores
+    - routes
+    - replicasets.apps
+    - replicasets.extensions
+    - replicationcontrollers
+    - pods
+    - managebuilds
+    - managedeployments
+    - manageserverbundles
+    - managestatuscheckers
+    - OAuthAccessToken
+    - NetNamespace
+    - backup
+    - restore
+    - nodes
+    - events
+    - events.events.k8s.io
+    - backups.velero.io
+    - restores.velero.io
+    - resticrepositories.velero.io
+    - validatingwebhookconfigurations
+    - mutatingwebhookconfigurations
+  includeClusterResources: true
+  includedNamespaces:
+    - mas-sb1-manage
+  labelSelector:
+    matchExpressions:
+      - key: mas.ibm.com/appType
+        operator: NotIn
+        values:
+          - entitymgr-appstatus-operator
+          - entitymgr-bdi-operator
+          - entitymgr-ws-operator
+          - groupSynchAgent
+          - serverBundle
+          - maxinstudb
+          - userSynchAgent
+      - key: app.kubernetes.io/managed-by
+        operator: NotIn
+        values:
+          - ibm-truststore-mgr-controller-manager

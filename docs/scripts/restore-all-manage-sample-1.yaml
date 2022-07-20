@@ -1,0 +1,12 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-all-manage-sample-1
+  namespace: openshift-adp
+spec:
+  backupName: backup-all-manage-sample-1
+  includeClusterResources: true
+  includedNamespaces:
+    - mas-sb1-manage
+  includedResources:
+    - serviceaccounts
