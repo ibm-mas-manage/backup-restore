@@ -25,7 +25,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 	- Click on the OADP card and install.
 
 ### Create Credentials Secret
-    Create a secret file with the following content. For example,[cloud-cred.yaml](scripts/cloud-cred.yaml)
+    Create a secret file with the following content. For example,[cloud-cred.yaml](/scripts/cloud-cred.yaml)
 
 ```
 [default]
@@ -53,7 +53,7 @@ oc create secret generic cloud-credentials --namespace openshift-adp --from-file
 
 - Create an instance for DataProtectionApplication.
     - Add s3Url in config and update bucket in objectStorage section.
-    - For example, [dataprotectionapplication-velero-sample.yaml](scripts/dataprotectionapplication-velero-sample.yaml)
+    - For example, [dataprotectionapplication-velero-sample.yaml](/scripts/dataprotectionapplication-velero-sample.yaml)
 
 ```
 spec:
@@ -101,7 +101,7 @@ spec:
 ## Create Backup
 
     In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-    Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](scripts/cbackup-all-manange-sample-1.yaml)
+    Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](/scripts/cbackup-all-manange-sample-1.yaml)
     Check the backup status.
 
 ![Image](backup.png) 
@@ -169,7 +169,7 @@ Character Position  |  Character Period  | Acceptable Values  |
 4 | Month | 1-12,* |
 5 | Day of Week | 1-7,* |
 
-Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](scripts/schedule-all-manage-sample-1.yaml)
+Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](/scripts/schedule-all-manage-sample-1.yaml)
 
 
 ## CSI Snapshots
