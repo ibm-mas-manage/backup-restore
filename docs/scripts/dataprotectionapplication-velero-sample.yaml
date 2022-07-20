@@ -26,6 +26,7 @@ spec:
       defaultPlugins:
         - openshift
         - aws
+        - csi
   snapshotLocations:
     - velero:
         config:
