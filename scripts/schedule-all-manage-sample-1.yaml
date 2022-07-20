@@ -1,0 +1,13 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: schedule-all-manage-sample-1
+  namespace: openshift-adp
+spec:
+  schedule: 30, 20, 12, 12, *
+  template:
+    storageLocation: velero-sample-1
+    includeClusterResources: true
+    includedNamespaces:
+      - mas-sb1-manage
+ 
