@@ -111,12 +111,14 @@ spec:
     - Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
 
 Retrieve backup:
+
 ```
 ./velero  get backups
 
 ```
 
 Describe backups:
+
 ```
 ./velero backup describe <backup_name> --details
 ```
@@ -137,22 +139,29 @@ Retrieve backup logs
     - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 
 Retrieve restores:
+
 ```
 ./velero get restores
 ```
 
 Describe restores:
+
 ```
 ./velero restore describe <restore_name>
 ```
 
+Retrieve restore logs:
 
-##Schedule Backup
+```
+ ./velero restore logs <restore_name>
+​```
 
+
+## Schedule Backup
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
 
 Character Position  |  Character Period  | Acceptable Values  | 
------- |----- |-----|
+--|----- |-----|
 1 | Minute | 0-59,* |
 2 | Hour | 0-23,* |
 3 | Day of Month | 0-31,* |
