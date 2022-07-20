@@ -192,6 +192,7 @@ deployment:
           pvcName: manage-csi-pvc
           size: 8Gi
           storageClassName: ocs-storagecluster-cephfs
+		  
 ```
 
 - Add attached docs from Manage Application. For example, go to Asset app, attach asset document to Asset record.
