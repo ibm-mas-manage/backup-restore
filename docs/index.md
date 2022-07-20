@@ -146,11 +146,6 @@ Describe restores:
 ./velero restore describe <restore_name>
 ```
 
-Retrieve restore logs:
-```
- ./velero restore logs <restore_name>
-​```
-
 
 ##Schedule Backup
 
