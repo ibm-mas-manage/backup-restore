@@ -9,24 +9,27 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 ![Image](oadparch.png)
 
 
-### 1. Configure S3 Storage to store backup files
-	- Login to your IBM Cloud account.
-    - Create and configure object storage service.
+## Configure S3 Storage to store backup files
 
-	Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
+- Login to your IBM Cloud account.
+- Create and configure object storage service.
+
+Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
 	
-### 2.Setup OADP operator
-    - Log on to the OpenShift web console as the cluster administrator.
-    - In the navigation panel, click Operators> OperatorHub.
-    - To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.
+## Setup OADP operator
+
+- Log on to the OpenShift web console as the cluster administrator.
+- In the navigation panel, click Operators> OperatorHub.
+- To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.
 
 ![Image](operatorhub.png)
 	
 	
-	- Click on the OADP card and install.
+- Click on the OADP card and install.
 
-#### Create Credentials Secret
-    - Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
+### Create Credentials Secret
+
+- Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 	
 
 ```
@@ -36,7 +39,7 @@ aws_secret_access_key=<storage_secret_access_key
 
 ```
 
-#### Create secret
+### Create secret
 
 ```
 oc create secret generic cloud-credentials
@@ -49,7 +52,7 @@ For example,
 oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
 ```
 
-#### Create the DataProtectionApplication Custom Resource
+### Create the DataProtectionApplication Custom Resource
 
 - Create an instance for DataProtectionApplication.
 	- Add s3Url in config and update bucket in objectStorage section.
@@ -93,33 +96,40 @@ spec:
 
 ![Image](location.png)
 
-### Verify Install
-	- Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
+## Verify Install
+
+- Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
 
 ![Image](verify.png)
 
 ## Create Backup
-   - In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-   - Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
-   - Check the backup status.
+
+- In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
+- Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
+- Check the backup status.
+
 
 ![Image](backup.png) 
 
 
 ## Backup Details and Troubleshooting
-    - Navigate to **Workloads->Pods** in openshift-adp project.
-    - Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
+
+- Navigate to **Workloads->Pods** in openshift-adp project.
+- Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
 
 Retrieve backup:
+
 ```
 ./velero  get backups
 
 ```
 
 Describe backups:
+
 ```
 ./velero backup describe <backup_name> --details
 ```
+
 Retrieve backup logs
 
 ```
@@ -127,32 +137,41 @@ Retrieve backup logs
 ```
 
 ## Create Restore
+
 - In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
     - Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
     - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
     - Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
 
-### Restore Details and Troubleshooting
-    - Navigate to **Workloads->Pods** in openshift-adp project.
-    - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
+## Restore Details and Troubleshooting
+
+- Navigate to **Workloads->Pods** in openshift-adp project.
+- Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 
 Retrieve restores:
+
 ```
 ./velero get restores
 ```
 
 Describe restores:
+
 ```
 ./velero restore describe <restore_name>
 ```
 
+Retrieve restore logs:
 
-##Schedule Backup
+```
+ ./velero restore logs <restore_name>
+​```
 
+
+## Schedule Backup
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
 
 Character Position  |  Character Period  | Acceptable Values  | 
------- |----- |-----|
+--|----- |-----|
 1 | Minute | 0-59,* |
 2 | Hour | 0-23,* |
 3 | Day of Month | 0-31,* |
@@ -171,15 +190,16 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 	- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
+
 ```
 deployment:
-      buildTag: latest
-      mode: up
-      persistentVolumes:
-        - mountPath: /doclinks
-          pvcName: manage-csi-pvc
-          size: 8Gi
-          storageClassName: ocs-storagecluster-cephfs
+    buildTag: latest
+    mode: up
+    persistentVolumes:
+      - mountPath: /doclinks
+        pvcName: manage-csi-pvc
+        size: 8Gi
+        storageClassName: ocs-storagecluster-cephfs
 		  
 ```
 
