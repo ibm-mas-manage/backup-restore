@@ -25,7 +25,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 	- Click on the OADP card and install.
 
 ### Create Credentials Secret
-    Create a secret file with the following content. For example,[cloud-cred.yaml](/scripts/cloud-cred.yaml)
+    Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 
 ```
 [default]
@@ -53,7 +53,7 @@ oc create secret generic cloud-credentials --namespace openshift-adp --from-file
 
 - Create an instance for DataProtectionApplication.
     - Add s3Url in config and update bucket in objectStorage section.
-    - For example, [dataprotectionapplication-velero-sample.yaml](/scripts/dataprotectionapplication-velero-sample.yaml)
+    - For example, [dataprotectionapplication-velero-sample.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/dataprotectionapplication-velero-sample.yaml)
 
 ```
 spec:
@@ -101,37 +101,40 @@ spec:
 ## Create Backup
 
     In the navigation panel, go to installed Operators. Select OADP and create a Backup instance.
-    Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](/scripts/cbackup-all-manange-sample-1.yaml)
+    Update `includedNamespaces` in the yaml with your Manage namespace/project. For example, [backup-all-manange-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/backup-all-manange-sample-1.yaml)
     Check the backup status.
 
 ![Image](backup.png) 
 
 
 ## Backup Details and Troubleshooting
-    - Navigate to Workloads->Pods in openshift-adp project.
+    - Navigate to **Workloads->Pods** in openshift-adp project.
     - Click on Velero pod. Go to Terminal tab. Run the following commands to get backup details
 
-```
 Retrieve backup:
-./velero  get backups
 ```
+./velero  get backups
 
 ```
 Describe backups:
-./velero backup describe <backup_name> --details
+
 ```
+./velero backup describe <backup_name> --details
 
 ```
 Retrieve backup logs
+
+```
  ./velero backup logs <backup_name>
+ 
 ```
 
 ## Create Restore
 
 	- In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
     - Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
-    - Sample restore-all-manage-sample-1.yaml and restore-all-manage-sample-2.yaml
-        Update “includedNamespaces” in the yaml with your Manage namespace/project and backup name.
+    - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
+        Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
 
 ### Restore Details and Troubleshooting
 
@@ -162,14 +165,14 @@ Retrieve restore logs
 You can specify a schedule to run backups. The duration can be specified using a combination of minutes (m), and hours (h).
 
 Character Position  |  Character Period  | Acceptable Values  | 
------- | ---------- | ------------- | ------------| 
+------|----------|------------- |
 1 | Minute | 0-59,* |
 2 | Hour | 0-23,* |
 3 | Day of Month | 0-31,* |
 4 | Month | 1-12,* |
 5 | Day of Week | 1-7,* |
 
-Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](/scripts/schedule-all-manage-sample-1.yaml)
+Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/schedule-all-manage-sample-1.yaml)      
 
 
 ## CSI Snapshots
