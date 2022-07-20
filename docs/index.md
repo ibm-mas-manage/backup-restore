@@ -9,13 +9,13 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 ![Image](oadparch.png)
 
 
-### 1. Configure S3 Storage to store backup files
+## Configure S3 Storage to store backup files
 	- Login to your IBM Cloud account.
     - Create and configure object storage service.
 
 	Multiple storage backends are supported including IBM Cloud Object Storage, Amazon S3, Google Cloud Storage, Azure Blob Storage, and Minio.
 	
-### 2.Setup OADP operator
+## Setup OADP operator
     - Log on to the OpenShift web console as the cluster administrator.
     - In the navigation panel, click Operators> OperatorHub.
     - To install the OADP Operator, enter OADP in the search field. Click the OADP Operator card.
@@ -25,7 +25,7 @@ The OADP operator uses a Velero backup controller to backup cluster resources. V
 	
 	- Click on the OADP card and install.
 
-#### Create Credentials Secret
+### Create Credentials Secret
     - Create a secret file with the following content. For example,[cloud-cred.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/cloud-cred.yaml)
 	
 
@@ -36,7 +36,7 @@ aws_secret_access_key=<storage_secret_access_key
 
 ```
 
-#### Create secret
+### Create secret
 
 ```
 oc create secret generic cloud-credentials
@@ -49,7 +49,7 @@ For example,
 oc create secret generic cloud-credentials --namespace openshift-adp --from-file cloud=cloud-cred.yaml​
 ```
 
-#### Create the DataProtectionApplication Custom Resource
+### Create the DataProtectionApplication Custom Resource
 
 - Create an instance for DataProtectionApplication.
 	- Add s3Url in config and update bucket in objectStorage section.
@@ -93,7 +93,7 @@ spec:
 
 ![Image](location.png)
 
-### Verify Install
+## Verify Install
 	- Verify all the correct resources have been created, the command `oc get all -n openshift-adp` should look similar to:
 
 ![Image](verify.png)
