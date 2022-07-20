@@ -187,13 +187,17 @@ Check the backup status.
 </code></pre>
 <p>Retrieve restores:</p>
 <pre><code>./velero get restores
+
 </code></pre>
 <p>Describe restores:</p>
 <pre><code>./velero restore describe &lt;restore_name&gt;
+
 </code></pre>
 <p>Retrieve restore logs</p>
 <pre><code> ./velero restore logs &lt;restore_name&gt;
+
 ​```
+
 
 ##Schedule Backup
 
@@ -201,23 +205,26 @@ You can specify a schedule to run backups. The duration can be specified using a
 
 Character Position  |  Character Period  | Acceptable Values  | 
 ------ | ---------- | ------------- | ------------| 
-1 | Minute | 0-59, * |
-2 | Hour | 0-23, * |
-3 | Day of Month | 0-31, * |
-4 | Month | 1-12, * |
-5 | Day of Week | 1-7, * |
+1 | Minute | 0-59,* |
+2 | Hour | 0-23,* |
+3 | Day of Month | 0-31,* |
+4 | Month | 1-12,* |
+5 | Day of Week | 1-7,* |
 
-Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card.  For example,  [schedule-all-manage-sample-1.yaml](/scripts/schedule-all-manage-sample-1.yaml)
+Go to Schedule by navigating to Schedule tab or click on create instance on Schedule card. For example, [schedule-all-manage-sample-1.yaml](/scripts/schedule-all-manage-sample-1.yaml)
+
 
 ## CSI Snapshots
+
 Manage attached docs can be backed up and restored using CSI plugin.
-Configuration for Attached docs include
-- Storage and Volume Snapshot classes
-- Add label to Volume Snapshot class
-    - velero.io/csi-volumesnapshot-class=true
-- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
+    Configuration for Attached docs include
+    - Storage and Volume Snapshot classes
+    - Add label to Volume Snapshot class
+        - velero.io/csi-volumesnapshot-class=true
+    - Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
+
 </code></pre>
 <p>deployment:
       buildTag: latest
@@ -226,8 +233,8 @@ Sample Manage Workspace CR snippet:
         - mountPath: /doclinks
           pvcName: manage-csi-pvc
           size: 8Gi
-          storageClassName: ocs-storagecluster-cephfs
-```</p>
+          storageClassName: ocs-storagecluster-cephfs</p>
+<p>```</p>
 <ul>
 <li>Add attached docs from Manage Application. For example, go to Asset app, attach asset document to Asset record.</li>
 <li>Take a backup </li>
@@ -287,5 +294,5 @@ Sample Manage Workspace CR snippet:
 
 <!--
 MkDocs version : 1.3.1
-Build Date UTC : 2022-07-20 02:46:30.552793+00:00
+Build Date UTC : 2022-07-20 03:02:31.566441+00:00
 -->
