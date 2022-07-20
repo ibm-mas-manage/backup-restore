@@ -134,7 +134,7 @@ Retrieve backup logs
     - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
     - Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
 
-### Restore Details and Troubleshooting
+## Restore Details and Troubleshooting
     - Navigate to **Workloads->Pods** in openshift-adp project.
     - Click on Velero pod. Go to Terminal tab. Run the following commands to get restore details.
 
@@ -180,6 +180,7 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 	- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
+
 ```
 deployment:
       buildTag: latest
