@@ -136,12 +136,15 @@ Retrieve backup logs
  ./velero backup logs <backup_name>
 ```
 
+
 ## Create Restore
 
 - In the navigation panel, go to installed Operators. Select OADP and create a Restore instance.
+
     - Restore needs to be done in two steps. Restore service accounts in step1 and Manage project resources in step 2.
     - Sample [restore-all-manage-sample-1.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-1.yaml) and [restore-all-manage-sample-2.yaml](https://github.com/ibm-mas-manage/backup-restore/blob/main/docs/scripts/restore-all-manage-sample-2.yaml)
     - Update `includedNamespaces` in the yaml with your Manage namespace/project and backup name.
+
 
 ## Restore Details and Troubleshooting
 
@@ -164,7 +167,7 @@ Retrieve restore logs:
 
 ```
  ./velero restore logs <restore_name>
-​```
+```
 
 
 ## Schedule Backup
@@ -182,12 +185,13 @@ Go to Schedule by navigating to Schedule tab or click on create instance on Sche
 
 
 ## CSI Snapshots
-- Manage attached docs can be backed up and restored using CSI plugin.
-- Configuration for Attached docs include
+- Attached docs can be backed up and restored using OADP CSI plugin.
+- Configuration for attached docs requires:
+
 	- Storage and Volume Snapshot classes
 	- Add label to Volume Snapshot class
 		- velero.io/csi-volumesnapshot-class=true
-	- Configure PVC/PV using MAS admin UI or add in Manage Workspace CR
+	- PVC/PV configuration using MAS admin UI or add in Manage Workspace CR
 
 Sample Manage Workspace CR snippet:
 
@@ -204,7 +208,7 @@ deployment:
 ```
 
 - Add attached docs from Manage Application. For example, go to Asset app, attach asset document to Asset record.
-- Take a backup 
+- Take a backup. 
 
 ![Image](csibackup.png) 
 
